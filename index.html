@@ -46,7 +46,7 @@ body{background:#0d0000;background-image:radial-gradient(ellipse 80% 50% at 50% 
 .srv-kanji{font-family:'Noto Serif JP',serif;font-size:.8rem;color:var(--parch);opacity:.45;letter-spacing:.2em;margin-bottom:1.1rem}
 .srv-card .btn{width:100%;clip-path:none;font-size:.65rem;padding:.5rem}
 
-/* CODE MODAL (reuse pw-overlay style) */
+/* CODE MODAL */
 #codeOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1000;align-items:center;justify-content:center}
 #codeOverlay.open{display:flex}
 .code-box{background:var(--page);padding:2rem;border:3px solid var(--dred);box-shadow:0 0 40px rgba(192,57,43,.5);width:100%;max-width:320px;text-align:center;animation:mIn .3s ease}
@@ -56,10 +56,6 @@ body{background:#0d0000;background-image:radial-gradient(ellipse 80% 50% at 50% 
 .code-box input{width:100%;background:rgba(255,255,255,.6);border:none;border-bottom:2px solid var(--dred);padding:.5rem .7rem;font-family:'Share Tech Mono',monospace;font-size:1rem;color:var(--ink);outline:none;text-align:center;letter-spacing:.25em;margin-bottom:.7rem;text-transform:uppercase}
 .code-box input::placeholder{letter-spacing:.1em;font-size:.85rem}
 .pw-err{color:var(--red);font-size:.78rem;font-style:italic;min-height:1.1rem;margin-bottom:.4rem}
-
-/* BACK BUTTON (fixed top-left) */
-#backBtn{display:none;position:fixed;bottom:2.5rem;left:2rem;z-index:401;font-family:'Share Tech Mono',monospace;font-size:.56rem;padding:.22rem .65rem;border:1px solid #4a2020;background:#0a0000;color:#7a4040;cursor:pointer;letter-spacing:.08em;transition:all .15s}
-#backBtn:hover{border-color:var(--gold);color:var(--gold)}
 
 /* ADMIN BAR */
 .admin-bar{position:fixed;top:0;left:0;right:0;z-index:500;background:linear-gradient(135deg,#0a0000,#2a0000);border-bottom:2px solid var(--gold);padding:.45rem 1rem;display:flex;align-items:center;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--gold);transform:translateY(-100%);transition:transform .3s ease}
@@ -154,6 +150,10 @@ h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(2rem,7vw,4rem);font-w
 .page-num{position:absolute;bottom:.6rem;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--sepia);opacity:.55}
 .page-num.l{left:1rem}.page-num.r{right:1rem}
 
+/* DRAFT STAMP */
+.draft-stamp{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-25deg);font-family:'Cinzel Decorative',cursive;font-size:1.8rem;color:rgba(200,150,12,.18);border:4px solid rgba(200,150,12,.18);padding:.4rem 1rem;white-space:nowrap;pointer-events:none;z-index:10;letter-spacing:.15em}
+.draft-label{display:inline-block;font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.15em;padding:.15rem .5rem;border:1px solid var(--gold);color:var(--gold);background:rgba(200,150,12,.1);margin-bottom:.4rem}
+
 /* REDACTION */
 .rw{position:relative;display:flex;align-items:center;gap:.3rem;width:100%;margin:.1rem 0}
 .rc{flex:1;position:relative;min-width:0}
@@ -162,6 +162,19 @@ h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(2rem,7vw,4rem);font-w
 .rtoggle{display:none;width:20px;height:20px;flex-shrink:0;border:1px solid #555;background:#1a0000;color:#888;font-size:.65rem;cursor:pointer;align-items:center;justify-content:center;transition:all .15s}
 .is-admin .rtoggle{display:flex}
 .rtoggle.active{background:#3a0000;border-color:var(--red);color:#ff8888}
+
+/* FORM HIDE TOGGLE */
+.frow-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.22rem}
+.frow-header label{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--red);text-transform:uppercase}
+.fhide-btn{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.08em;padding:.12rem .4rem;border:1px solid #888;background:transparent;color:#888;cursor:pointer;transition:all .15s;white-space:nowrap}
+.fhide-btn:hover{border-color:var(--gold);color:var(--gold)}
+.fhide-btn.active{border-color:var(--red);color:#ff8888;background:rgba(100,0,0,.15)}
+
+/* DRAFT TOGGLE */
+.draft-toggle-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.85rem;padding:.5rem .65rem;border:1px solid #4a1a1a;background:#1a0000}
+.draft-toggle-label{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--gold);flex:1}
+.draft-toggle-btn{font-family:'Share Tech Mono',monospace;font-size:.52rem;padding:.18rem .55rem;border:1px solid #888;background:transparent;color:#888;cursor:pointer;transition:all .15s}
+.draft-toggle-btn.active{border-color:var(--gold);color:var(--gold2);background:rgba(200,150,12,.1)}
 
 /* NAV */
 .nav-row{display:flex;align-items:center;justify-content:center;gap:1.5rem;margin:.8rem 0 2rem;position:relative;z-index:2}
@@ -172,7 +185,7 @@ h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(2rem,7vw,4rem);font-w
 /* MODALS */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:100;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
 .overlay.open{display:flex}
-.modal{background:var(--page);background-image:repeating-linear-gradient(transparent,transparent 28px,rgba(180,140,80,.18) 29px);width:100%;max-width:460px;max-height:90vh;overflow-y:auto;padding:2rem;border:3px solid var(--dred);box-shadow:0 0 60px rgba(192,57,43,.5),8px 8px 0 var(--blood);position:relative;animation:mIn .3s ease}
+.modal{background:var(--page);background-image:repeating-linear-gradient(transparent,transparent 28px,rgba(180,140,80,.18) 29px);width:100%;max-width:480px;max-height:90vh;overflow-y:auto;padding:2rem;border:3px solid var(--dred);box-shadow:0 0 60px rgba(192,57,43,.5),8px 8px 0 var(--blood);position:relative;animation:mIn .3s ease}
 @keyframes mIn{from{transform:translateY(-20px) scale(.95);opacity:0}to{transform:none;opacity:1}}
 .modal h2{font-family:'Cinzel Decorative',cursive;font-size:1rem;color:var(--blood);text-align:center;border-bottom:2px solid var(--dred);padding-bottom:.5rem;margin-bottom:1.1rem}
 .mclose{position:absolute;top:.7rem;right:.8rem;background:none;border:none;font-size:1.3rem;color:var(--dred);cursor:pointer;font-weight:bold}
@@ -189,7 +202,7 @@ h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(2rem,7vw,4rem);font-w
 .rp[data-r="C"]{background:#001400;color:var(--rank-c);border-color:var(--rank-c)}
 .rp[data-r="D"]{background:#0a0a0a;color:var(--rank-d);border-color:var(--rank-d)}
 .img-prev{width:75px;height:94px;object-fit:cover;border:2px solid var(--dred);margin-top:.35rem;display:none}
-.mactions{display:flex;gap:.7rem;justify-content:flex-end;margin-top:1.1rem}
+.mactions{display:flex;gap:.7rem;justify-content:flex-end;margin-top:1.1rem;flex-wrap:wrap}
 
 /* PASSWORD */
 .pw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:600;align-items:center;justify-content:center}
@@ -198,7 +211,6 @@ h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(2rem,7vw,4rem);font-w
 .pw-box h3{font-family:'Cinzel Decorative',cursive;font-size:.95rem;color:var(--blood);margin-bottom:.8rem}
 .pw-box p{font-family:'Crimson Pro',serif;font-style:italic;font-size:.85rem;color:#5a3020;margin-bottom:.9rem}
 .pw-box input{width:100%;background:rgba(255,255,255,.6);border:none;border-bottom:2px solid var(--dred);padding:.5rem .7rem;font-family:'Crimson Pro',serif;font-size:1rem;color:var(--ink);outline:none;text-align:center;letter-spacing:.2em;margin-bottom:.7rem}
-.pw-err{color:var(--red);font-size:.78rem;font-style:italic;min-height:1.1rem;margin-bottom:.4rem}
 
 /* NOTIF */
 .notif{position:fixed;bottom:2.5rem;right:2rem;background:#1a0000;border-left:4px solid var(--gold);color:var(--parch);padding:.65rem 1.2rem;font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.1em;box-shadow:0 4px 20px rgba(0,0,0,.6);z-index:700;transform:translateX(200%);transition:transform .3s ease}
@@ -236,9 +248,7 @@ h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(2rem,7vw,4rem);font-w
     <div class="srv-main-title">Bingo Book</div>
     <div class="srv-sub">手配書 · Choisissez votre serveur</div>
   </div>
-
   <div class="srv-cards">
-    <!-- Skyfall -->
     <div class="srv-card" onclick="openCodeModal('skyfall')">
       <div class="srv-badge active">⬡ ACTIF</div>
       <div class="srv-name">Skyfall</div>
@@ -246,7 +256,6 @@ h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(2rem,7vw,4rem);font-w
       <div class="srv-kanji">天落 · Village des Hauteurs</div>
       <button class="btn" onclick="event.stopPropagation();openCodeModal('skyfall')">ACCÉDER</button>
     </div>
-    <!-- Shinjuku -->
     <div class="srv-card" onclick="openCodeModal('shinjuku')">
       <div class="srv-badge dev">⬡ EN DÉVELOPPEMENT</div>
       <div class="srv-name">Shinjuku</div>
@@ -345,7 +354,7 @@ h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(2rem,7vw,4rem);font-w
 
 <div class="notif" id="notif"></div>
 
-<!-- PASSWORD (admin login) -->
+<!-- PASSWORD -->
 <div class="pw-overlay" id="pwOverlay">
   <div class="pw-box">
     <h3>Accès Hokage</h3>
@@ -362,16 +371,50 @@ h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(2rem,7vw,4rem);font-w
   <div class="modal">
     <button class="mclose" onclick="closeForm()">&#10005;</button>
     <h2 id="formTitle">📋 Nouvelle Fiche Criminelle</h2>
-    <div class="frow"><label>Pseudo Discord</label><input type="text" id="fName" placeholder="ex: ShadowNinja"/></div>
-    <div class="frow"><label>Tag / Rôle</label><input type="text" id="fTag" placeholder="ex: Spammeur, Troll..."/></div>
+
+    <!-- Pseudo -->
     <div class="frow">
-      <label>Photo (depuis ton PC)</label>
+      <div class="frow-header">
+        <label>Pseudo Discord</label>
+        <button class="fhide-btn" id="h_name" onclick="toggleHideField('name',this)">▬ Visible</button>
+      </div>
+      <input type="text" id="fName" placeholder="ex: ShadowNinja"/>
+    </div>
+
+    <!-- Tag -->
+    <div class="frow">
+      <div class="frow-header">
+        <label>Tag / Rôle</label>
+        <button class="fhide-btn" id="h_tag" onclick="toggleHideField('tag',this)">▬ Visible</button>
+      </div>
+      <input type="text" id="fTag" placeholder="ex: Spammeur, Troll..."/>
+    </div>
+
+    <!-- Photo -->
+    <div class="frow">
+      <div class="frow-header">
+        <label>Photo (depuis ton PC)</label>
+        <button class="fhide-btn" id="h_photo" onclick="toggleHideField('photo',this)">▬ Visible</button>
+      </div>
       <input type="file" id="fPhoto" accept="image/*" onchange="previewPhoto(this)"/>
       <img id="photoPreview" class="img-prev"/>
     </div>
-    <div class="frow"><label>Crimes &amp; méfaits</label><textarea id="fCrimes" placeholder="Détaillez les infractions..."></textarea></div>
+
+    <!-- Crimes -->
     <div class="frow">
-      <label>Rang de dangerosité</label>
+      <div class="frow-header">
+        <label>Crimes &amp; méfaits</label>
+        <button class="fhide-btn" id="h_crimes" onclick="toggleHideField('crimes',this)">▬ Visible</button>
+      </div>
+      <textarea id="fCrimes" placeholder="Détaillez les infractions..."></textarea>
+    </div>
+
+    <!-- Rang -->
+    <div class="frow">
+      <div class="frow-header">
+        <label>Rang de dangerosité</label>
+        <button class="fhide-btn" id="h_rank" onclick="toggleHideField('rank',this)">▬ Visible</button>
+      </div>
       <div class="rank-pick">
         <div class="rp on" data-r="S" onclick="pickRank(this)">S — Menace Extrême</div>
         <div class="rp" data-r="A" onclick="pickRank(this)">A — Très Dangereux</div>
@@ -380,16 +423,44 @@ h1{font-family:'Cinzel Decorative',cursive;font-size:clamp(2rem,7vw,4rem);font-w
         <div class="rp" data-r="D" onclick="pickRank(this)">D — Méfiant</div>
       </div>
     </div>
+
+    <!-- Statut -->
     <div class="frow">
-      <label>Statut</label>
+      <div class="frow-header">
+        <label>Statut</label>
+        <button class="fhide-btn" id="h_status" onclick="toggleHideField('status',this)">▬ Visible</button>
+      </div>
       <select id="fStatus">
         <option value="active">🔴 Actif — En liberté</option>
         <option value="ban">⚫ Banni — Éliminé</option>
         <option value="watch">🟠 Sous Surveillance</option>
       </select>
     </div>
-    <div class="frow"><label>Prime (ryō)</label><input type="text" id="fBounty" placeholder="ex: 50 000"/></div>
-    <div class="frow"><label>Notes du Hokage</label><textarea id="fNotes" placeholder="Observations confidentielles..."></textarea></div>
+
+    <!-- Prime -->
+    <div class="frow">
+      <div class="frow-header">
+        <label>Prime (ryō)</label>
+        <button class="fhide-btn" id="h_bounty" onclick="toggleHideField('bounty',this)">▬ Visible</button>
+      </div>
+      <input type="text" id="fBounty" placeholder="ex: 50 000"/>
+    </div>
+
+    <!-- Notes -->
+    <div class="frow">
+      <div class="frow-header">
+        <label>Notes du Hokage</label>
+        <button class="fhide-btn" id="h_notes" onclick="toggleHideField('notes',this)">▬ Visible</button>
+      </div>
+      <textarea id="fNotes" placeholder="Observations confidentielles..."></textarea>
+    </div>
+
+    <!-- Brouillon toggle -->
+    <div class="draft-toggle-row">
+      <span class="draft-toggle-label">📝 Mode brouillon — invisible pour les visiteurs</span>
+      <button class="draft-toggle-btn" id="draftToggleBtn" onclick="toggleDraftMode(this)">NON</button>
+    </div>
+
     <input type="hidden" id="fEditId"/>
     <div class="mactions">
       <button class="btn" style="clip-path:none" onclick="closeForm()">Annuler</button>
@@ -414,15 +485,12 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 let _unsubscribe = null;
 
 window.initFirebase = function(colName) {
-  // Unsubscribe from any previous listener
   if (_unsubscribe) { _unsubscribe(); _unsubscribe = null; }
   window.bandits = [];
   window._fbReady = false;
-
   const col = collection(db, colName);
 
   _unsubscribe = onSnapshot(col,
@@ -440,17 +508,14 @@ window.initFirebase = function(colName) {
       clearTimeout(window._loadingTimeout);
       console.error('Firestore:', err);
       document.getElementById('loadingMsg').textContent =
-        'ERREUR FIRESTORE — Vérifiez les règles de sécurité (' + err.code + ')';
+        'ERREUR FIRESTORE — Vérifiez les règles (' + err.code + ')';
     }
   );
 
-  // Fallback : si pas de réponse en 12s, afficher un message
   clearTimeout(window._loadingTimeout);
   window._loadingTimeout = setTimeout(() => {
-    if (document.getElementById('loading').style.display !== 'none') {
-      document.getElementById('loadingMsg').textContent =
-        'CONNEXION LENTE — Vérifiez votre réseau ou les règles Firestore';
-    }
+    if (document.getElementById('loading').style.display !== 'none')
+      document.getElementById('loadingMsg').textContent = 'CONNEXION LENTE — Vérifiez votre réseau';
   }, 12000);
 
   window.fbSave   = async (b) => { await setDoc(doc(col, b.id), b); };
@@ -461,7 +526,6 @@ window.initFirebase = function(colName) {
   };
 };
 
-// Auto-init if server was already selected before this module loaded
 if (window._pendingColName) {
   window.initFirebase(window._pendingColName);
   window._pendingColName = null;
@@ -469,14 +533,12 @@ if (window._pendingColName) {
 </script>
 
 <script>
-// ── SERVER CONFIG ──────────────────────────────────────────────
 const SERVERS = {
-  skyfall:  { name: 'Skyfall',  code: 'BADJI',    col: 'bandits_skyfall',  badge: 'ACTIF',            kanji: '天落' },
-  shinjuku: { name: 'Shinjuku', code: 'SHINJUKU', col: 'bandits_shinjuku', badge: 'EN DÉVELOPPEMENT', kanji: '新宿' }
+  skyfall:  { name: 'Skyfall',  code: 'BADJI',    col: 'bandits_skyfall',  kanji: '天落' },
+  shinjuku: { name: 'Shinjuku', code: 'SHINJUKU', col: 'bandits_shinjuku', kanji: '新宿' }
 };
 const ADMIN_PW = 'K4Q)^]hnt[sM*337RXq3';
 
-// ── STATE ──────────────────────────────────────────────────────
 window.bandits = [];
 let filtered = [];
 let currentIdx = 0;
@@ -485,6 +547,12 @@ let selectedRank = 'S';
 let photoB64 = null;
 let isAdmin = false;
 let _pendingCodeServer = null;
+
+// Hidden fields state for the form
+let formHidden = {};
+let formIsDraft = false;
+
+const HIDE_FIELDS = ['name','tag','photo','crimes','rank','status','bounty','notes'];
 
 const RI = {
   S:{label:'Menace Extrême',color:'#cc0000',pct:100,desc:'Danger absolu pour le village'},
@@ -499,7 +567,7 @@ const SI = {
   watch:{cls:'sw',txt:'🟠 Surveillance'}
 };
 
-// ── PARTICLES ─────────────────────────────────────────────────
+// Particles
 (function(){
   const c=document.getElementById('particles');
   for(let i=0;i<20;i++){
@@ -528,7 +596,7 @@ window.closeCodeModal = closeCodeModal;
 
 function checkCode() {
   if (!_pendingCodeServer) return;
-  const serverKey = _pendingCodeServer; // capture avant closeCodeModal (qui remet à null)
+  const serverKey = _pendingCodeServer;
   const entered = document.getElementById('codeInput').value.trim().toUpperCase();
   const srv = SERVERS[serverKey];
   if (entered === srv.code || entered === ADMIN_PW) {
@@ -546,33 +614,21 @@ window.checkCode = checkCode;
 function activateServer(serverKey) {
   sessionStorage.setItem('bb_server', serverKey);
   const srv = SERVERS[serverKey];
-
-  // Update UI labels
-  document.getElementById('headerServerName').textContent =
-    srv.kanji + ' · Serveur ' + srv.name;
+  document.getElementById('headerServerName').textContent = srv.kanji + ' · Serveur ' + srv.name;
   document.getElementById('adminServerLabel').textContent = '[ ' + srv.name.toUpperCase() + ' ]';
-
-  // Hide server screen, show loading
   document.getElementById('serverScreen').style.display = 'none';
   document.getElementById('loading').style.display = 'flex';
   document.getElementById('loadingMsg').textContent = 'CONNEXION À ' + srv.name.toUpperCase() + '...';
-
-  // Show main UI elements (they were hidden while on server screen)
   document.querySelector('header').style.display = '';
   document.querySelector('.toolbar').style.display = '';
   document.getElementById('statsBar').style.display = '';
   document.querySelector('.book-wrap').style.display = '';
   document.getElementById('visitorBanner').style.display = isAdmin ? 'none' : 'flex';
-
-  // Init Firebase with the right collection
   if (window.initFirebase) {
     window.initFirebase(srv.col);
   } else {
-    // Module script hasn't loaded yet — it will check this on load
     window._pendingColName = srv.col;
   }
-
-  // Auto admin login if password was used as code
   if (sessionStorage.getItem('bb_admin') === '1') {
     sessionStorage.removeItem('bb_admin');
     setTimeout(() => setAdmin(true), 600);
@@ -580,41 +636,32 @@ function activateServer(serverKey) {
 }
 
 function goBackToServers() {
-  // Reset state
   sessionStorage.removeItem('bb_server');
   isAdmin = false;
   window.bandits = [];
   filtered = [];
   document.body.classList.remove('is-admin');
   document.getElementById('adminBar').classList.remove('visible');
-
-  // Hide main UI
   document.querySelector('header').style.display = 'none';
   document.querySelector('.toolbar').style.display = 'none';
   document.getElementById('statsBar').style.display = 'none';
   document.querySelector('.book-wrap').style.display = 'none';
   document.getElementById('visitorBanner').style.display = 'none';
   document.getElementById('loading').style.display = 'none';
-
-  // Show server screen
   document.getElementById('serverScreen').style.display = 'flex';
 }
 window.goBackToServers = goBackToServers;
 
-// ── BOOT: check session ───────────────────────────────────────
+// Boot
 (function boot() {
   const saved = sessionStorage.getItem('bb_server');
   if (saved && SERVERS[saved]) {
-    // Server already chosen — queue Firebase init and keep loading screen
     window._pendingColName = SERVERS[saved].col;
     const srv = SERVERS[saved];
-    document.getElementById('headerServerName').textContent =
-      srv.kanji + ' · Serveur ' + srv.name;
+    document.getElementById('headerServerName').textContent = srv.kanji + ' · Serveur ' + srv.name;
     document.getElementById('adminServerLabel').textContent = '[ ' + srv.name.toUpperCase() + ' ]';
     document.getElementById('loadingMsg').textContent = 'CONNEXION À ' + srv.name.toUpperCase() + '...';
-    // Main UI stays hidden until Firebase is ready (loading screen covers it)
   } else {
-    // No server selected — show server screen
     document.getElementById('loading').style.display = 'none';
     document.querySelector('header').style.display = 'none';
     document.querySelector('.toolbar').style.display = 'none';
@@ -625,237 +672,301 @@ window.goBackToServers = goBackToServers;
   }
 })();
 
-// ── REDACTION ─────────────────────────────────────────────────
-function getRD(){return JSON.parse(localStorage.getItem('bb_redact')||'{}')}
-function saveRD(d){localStorage.setItem('bb_redact',JSON.stringify(d))}
-function isRedacted(bid,field){const d=getRD();return !!(d[bid]&&d[bid][field])}
-function toggleRedact(bid,field){
-  const d=getRD();
-  if(!d[bid])d[bid]={};
-  d[bid][field]=!d[bid][field];
-  saveRD(d);
-  const bar=document.getElementById('rb_'+bid+'_'+field);
-  const tog=document.getElementById('rt_'+bid+'_'+field);
-  if(bar)bar.classList.toggle('off',!d[bid][field]);
-  if(tog){tog.classList.toggle('active',d[bid][field]);tog.textContent=d[bid][field]?'👁':'▬';}
+// ── REDACTION (stockée dans Firestore via b.hidden) ───────────
+function RW(b, field, inner) {
+  const hidden = !isAdmin && b.hidden && b.hidden[field];
+  const isOn = b.hidden && b.hidden[field];
+  return `<div class="rw"><div class="rc"><div class="rb${isOn?'':' off'}" id="rb_${b.id}_${field}">██ CLASSIFIÉ ██</div>${inner}</div><button class="rtoggle${isOn?' active':''}" id="rt_${b.id}_${field}" onclick="toggleRedact('${b.id}','${field}')">${isOn?'👁':'▬'}</button></div>`;
 }
-function RW(bid,field,inner){
-  const red=isRedacted(bid,field);
-  return `<div class="rw"><div class="rc"><div class="rb${red?'':' off'}" id="rb_${bid}_${field}">██ CLASSIFIÉ ██</div>${inner}</div><button class="rtoggle${red?' active':''}" id="rt_${bid}_${field}" onclick="toggleRedact('${bid}','${field}')">${red?'👁':'▬'}</button></div>`;
+
+function toggleRedact(bid, field) {
+  if (!isAdmin) return;
+  const b = (window.bandits || []).find(x => x.id === bid);
+  if (!b || !window.fbSave) return;
+  if (!b.hidden) b.hidden = {};
+  b.hidden[field] = !b.hidden[field];
+  window.fbSave(b).catch(() => showNotif('⚠ Erreur sauvegarde'));
 }
 
 // ── ADMIN ─────────────────────────────────────────────────────
-function setAdmin(val){
-  isAdmin=val;
-  document.body.classList.toggle('is-admin',val);
-  document.getElementById('adminBar').classList.toggle('visible',val);
-  document.getElementById('visitorBanner').style.display=val?'none':'flex';
+function setAdmin(val) {
+  isAdmin = val;
+  document.body.classList.toggle('is-admin', val);
+  document.getElementById('adminBar').classList.toggle('visible', val);
+  document.getElementById('visitorBanner').style.display = val ? 'none' : 'flex';
   render();
 }
-function openLoginModal(){
+function openLoginModal() {
   document.getElementById('pwOverlay').classList.add('open');
-  document.getElementById('pwInput').value='';
-  document.getElementById('pwErr').textContent='';
-  setTimeout(()=>document.getElementById('pwInput').focus(),80);
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwErr').textContent = '';
+  setTimeout(() => document.getElementById('pwInput').focus(), 80);
 }
-function closePw(){document.getElementById('pwOverlay').classList.remove('open')}
-function checkPw(){
-  if(document.getElementById('pwInput').value===ADMIN_PW){
+function closePw() { document.getElementById('pwOverlay').classList.remove('open') }
+function checkPw() {
+  if (document.getElementById('pwInput').value === ADMIN_PW) {
     document.getElementById('pwOverlay').classList.remove('open');
-    setAdmin(true);showNotif('✔ Mode Hokage activé');
+    setAdmin(true); showNotif('✔ Mode Hokage activé');
   } else {
-    document.getElementById('pwErr').textContent='Mot de passe incorrect.';
-    document.getElementById('pwInput').value='';
+    document.getElementById('pwErr').textContent = 'Mot de passe incorrect.';
+    document.getElementById('pwInput').value = '';
   }
 }
-function logout(){setAdmin(false);showNotif('Déconnecté')}
+function logout() { setAdmin(false); showNotif('Déconnecté') }
 
 // ── FILTERS ───────────────────────────────────────────────────
-function toggleFilter(r,el){
-  if(r==='ALL'){const a=activeFilters.size===5;if(a)activeFilters.clear();else activeFilters=new Set(['S','A','B','C','D']);}
-  else{if(activeFilters.has(r))activeFilters.delete(r);else activeFilters.add(r);}
-  document.querySelectorAll('.rf').forEach(f=>{
-    if(f.dataset.r==='ALL')f.classList.toggle('on',activeFilters.size===5);
-    else f.classList.toggle('on',activeFilters.has(f.dataset.r));
+function toggleFilter(r, el) {
+  if (r === 'ALL') { const a = activeFilters.size === 5; if (a) activeFilters.clear(); else activeFilters = new Set(['S','A','B','C','D']); }
+  else { if (activeFilters.has(r)) activeFilters.delete(r); else activeFilters.add(r); }
+  document.querySelectorAll('.rf').forEach(f => {
+    if (f.dataset.r === 'ALL') f.classList.toggle('on', activeFilters.size === 5);
+    else f.classList.toggle('on', activeFilters.has(f.dataset.r));
   });
   applyFilters();
 }
-function applyFilters(){
-  const q=document.getElementById('searchQ').value.toLowerCase();
-  filtered=(window.bandits||[]).filter(b=>activeFilters.has(b.rank)&&(b.name.toLowerCase().includes(q)||b.tag.toLowerCase().includes(q)||(b.crimes||'').toLowerCase().includes(q)));
-  currentIdx=0;render();renderStats();
+function applyFilters() {
+  const q = document.getElementById('searchQ').value.toLowerCase();
+  filtered = (window.bandits || []).filter(b => {
+    if (b.draft && !isAdmin) return false; // brouillons cachés aux visiteurs
+    return activeFilters.has(b.rank) && (
+      b.name.toLowerCase().includes(q) ||
+      (b.tag || '').toLowerCase().includes(q) ||
+      (b.crimes || '').toLowerCase().includes(q)
+    );
+  });
+  currentIdx = 0; render(); renderStats();
 }
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
 
 // ── RENDER ────────────────────────────────────────────────────
-function render(){
-  const book=document.getElementById('book');
-  const nav=document.getElementById('navRow');
-  if(!filtered.length){
-    book.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;color:#5a3030"><div style="font-size:4rem;opacity:.12;margin-bottom:1rem">✦</div><p style="font-style:italic;font-family:'Crimson Pro',serif">${(window.bandits||[]).length?'Aucun résultat.':'Le Bingo Book est vide.'+(isAdmin?' Ajoutez le premier criminel.':'')}</p></div>`;
-    nav.style.display='none';return;
+function render() {
+  const book = document.getElementById('book');
+  const nav = document.getElementById('navRow');
+  if (!filtered.length) {
+    book.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;color:#5a3030"><div style="font-size:4rem;opacity:.12;margin-bottom:1rem">✦</div><p style="font-style:italic;font-family:'Crimson Pro',serif">${(window.bandits||[]).length ? 'Aucun résultat.' : 'Le Bingo Book est vide.'+(isAdmin?' Ajoutez le premier criminel.':'')}</p></div>`;
+    nav.style.display = 'none'; return;
   }
-  nav.style.display='flex';
-  const b=filtered[currentIdx];
-  const ri=RI[b.rank];
-  const si=SI[b.status||'active'];
-  document.getElementById('pageCtr').textContent=`${currentIdx+1} / ${filtered.length}`;
-  document.getElementById('prevBtn').disabled=currentIdx===0;
-  document.getElementById('nextBtn').disabled=currentIdx===filtered.length-1;
-  const photoHTML=b.photo?`<img src="${b.photo}" alt="${esc(b.name)}" style="width:100%;height:100%;object-fit:cover;border:3px solid var(--dred)">`:`<div class="no-photo">💀</div>`;
-  const adminBtns=isAdmin?`<div class="divider"></div><div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.2rem"><button class="btn" style="clip-path:none;font-size:.58rem;padding:.28rem .65rem" onclick="openEditModal('${b.id}')">✏ Modifier</button><button class="btn red" style="clip-path:none;font-size:.58rem;padding:.28rem .65rem" onclick="deleteBandit('${b.id}')">✕ Supprimer</button></div>`:'';
+  nav.style.display = 'flex';
+  const b = filtered[currentIdx];
+  const ri = RI[b.rank];
+  const si = SI[b.status || 'active'];
+  document.getElementById('pageCtr').textContent = `${currentIdx+1} / ${filtered.length}`;
+  document.getElementById('prevBtn').disabled = currentIdx === 0;
+  document.getElementById('nextBtn').disabled = currentIdx === filtered.length - 1;
 
-  book.innerHTML=`
+  const photoHTML = b.photo
+    ? `<img src="${b.photo}" alt="${esc(b.name)}" style="width:100%;height:100%;object-fit:cover;border:3px solid var(--dred)">`
+    : `<div class="no-photo">💀</div>`;
+
+  const draftBadge = b.draft
+    ? `<div class="draft-label">⬡ BROUILLON — Non publié</div>` : '';
+  const draftPageStamp = b.draft
+    ? `<div class="draft-stamp">BROUILLON</div>` : '';
+
+  const adminBtns = isAdmin ? `
+    <div class="divider"></div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.2rem">
+      <button class="btn" style="clip-path:none;font-size:.58rem;padding:.28rem .65rem" onclick="openEditModal('${b.id}')">✏ Modifier</button>
+      ${b.draft ? `<button class="btn" style="clip-path:none;font-size:.58rem;padding:.28rem .65rem;border-color:#44ff44;color:#44ff44" onclick="publishBandit('${b.id}')">✔ Publier</button>` : ''}
+      <button class="btn red" style="clip-path:none;font-size:.58rem;padding:.28rem .65rem" onclick="deleteBandit('${b.id}')">✕ Supprimer</button>
+    </div>` : '';
+
+  book.innerHTML = `
   <div class="page left">
+    ${draftPageStamp}
     <div class="photo-side">
+      ${draftBadge}
       <div class="photo-frame">
-        ${RW(b.id,'photo',photoHTML)}
+        ${RW(b,'photo',photoHTML)}
         <span class="pc tl"></span><span class="pc tr"></span><span class="pc bl"></span><span class="pc br"></span>
-        <div class="wanted-stamp">RECHERCHÉ</div>
+        <div class="wanted-stamp">${b.draft ? 'BROUILLON' : 'RECHERCHÉ'}</div>
       </div>
-      ${RW(b.id,'rank',`<div class="rank-badge" data-r="${b.rank}">${b.rank}</div>`)}
+      ${RW(b,'rank',`<div class="rank-badge" data-r="${b.rank}">${b.rank}</div>`)}
       <div class="rank-lbl">${ri.desc}</div>
     </div>
     <span class="page-num l">— ${currentIdx*2+1} —</span>
   </div>
   <div class="page right">
     <div class="info-side">
-      <div class="page-ttl">Fiche Criminelle · Classifié</div>
-      ${RW(b.id,'name',`<div class="criminal-name">${esc(b.name)}</div><div class="criminal-tag">⬡ ${esc(b.tag||'Bandit du Serveur')}</div>`)}
+      <div class="page-ttl">Fiche Criminelle · ${b.draft ? 'Brouillon' : 'Classifié'}</div>
+      ${RW(b,'name',`<div class="criminal-name">${esc(b.name)}</div><div class="criminal-tag">⬡ ${esc(b.tag||'Bandit du Serveur')}</div>`)}
       <div class="divider"></div>
       <div class="fl">Dangerosité — Rang ${b.rank} : ${ri.label}</div>
-      ${RW(b.id,'danger',`<div class="danger-track"><div class="danger-fill" style="width:${ri.pct}%;background:${ri.color}"></div></div>`)}
+      ${RW(b,'rank',`<div class="danger-track"><div class="danger-fill" style="width:${ri.pct}%;background:${ri.color}"></div></div>`)}
       <div class="divider"></div>
       <div style="display:grid;grid-template-columns:auto 1fr;gap:.15rem .5rem;margin-bottom:.3rem">
-        <span class="fl">Statut</span><span class="fv">${RW(b.id,'status',`<span class="status-badge ${si.cls}">${si.txt}</span>`)}</span>
-        <span class="fl">Prime</span><span class="fv">${RW(b.id,'bounty',esc(b.bounty||'???')+' ryō')}</span>
-        <span class="fl">Date</span><span class="fv">${RW(b.id,'date',b.date||'—')}</span>
+        <span class="fl">Statut</span><span class="fv">${RW(b,'status',`<span class="status-badge ${si.cls}">${si.txt}</span>`)}</span>
+        <span class="fl">Prime</span><span class="fv">${RW(b,'bounty',esc(b.bounty||'???')+' ryō')}</span>
+        <span class="fl">Date</span><span class="fv">${b.date||'—'}</span>
       </div>
       <div class="divider"></div>
       <div class="fl">Crimes &amp; Méfaits</div>
-      ${RW(b.id,'crimes',`<div class="crimes-text">${esc(b.crimes||'Aucun crime déclaré.')}</div>`)}
-      ${b.notes?`<div class="divider"></div><div class="fl">Notes du Hokage</div>${RW(b.id,'notes',`<div class="crimes-text" style="border-left-color:#8b6914">${esc(b.notes)}</div>`)}`:''}
+      ${RW(b,'crimes',`<div class="crimes-text">${esc(b.crimes||'Aucun crime déclaré.')}</div>`)}
+      ${b.notes ? `<div class="divider"></div><div class="fl">Notes du Hokage</div>${RW(b,'notes',`<div class="crimes-text" style="border-left-color:#8b6914">${esc(b.notes)}</div>`)}` : ''}
       ${adminBtns}
     </div>
     <span class="page-num r">— ${currentIdx*2+2} —</span>
   </div>`;
 }
 
-function navigate(d){currentIdx=Math.max(0,Math.min(filtered.length-1,currentIdx+d));render()}
+function navigate(d) { currentIdx = Math.max(0, Math.min(filtered.length-1, currentIdx+d)); render() }
 
-function renderStats(){
-  const total=(window.bandits||[]).length;const rc={};
-  (window.bandits||[]).forEach(b=>rc[b.rank]=(rc[b.rank]||0)+1);
-  const colors={S:'#cc0000',A:'#cc7700',B:'#b8a000',C:'#1a7a1a',D:'#666'};
-  let h=`<div class="stat"><div class="sdot" style="background:var(--gold)"></div>TOTAL : ${total}</div>`;
-  ['S','A','B','C','D'].forEach(r=>{if(rc[r])h+=`<div class="stat"><div class="sdot" style="background:${colors[r]}"></div>RANG ${r} : ${rc[r]}</div>`});
-  document.getElementById('statsBar').innerHTML=h;
+function renderStats() {
+  const all = window.bandits || [];
+  const published = all.filter(b => !b.draft);
+  const drafts = all.filter(b => b.draft);
+  const rc = {};
+  published.forEach(b => rc[b.rank] = (rc[b.rank]||0)+1);
+  const colors = {S:'#cc0000',A:'#cc7700',B:'#b8a000',C:'#1a7a1a',D:'#666'};
+  let h = `<div class="stat"><div class="sdot" style="background:var(--gold)"></div>TOTAL : ${published.length}</div>`;
+  ['S','A','B','C','D'].forEach(r => { if(rc[r]) h += `<div class="stat"><div class="sdot" style="background:${colors[r]}"></div>RANG ${r} : ${rc[r]}</div>` });
+  if (isAdmin && drafts.length) h += `<div class="stat"><div class="sdot" style="background:var(--gold)"></div>BROUILLONS : ${drafts.length}</div>`;
+  document.getElementById('statsBar').innerHTML = h;
+}
+
+// ── FORM HIDE FIELDS ──────────────────────────────────────────
+function toggleHideField(field, btn) {
+  formHidden[field] = !formHidden[field];
+  btn.classList.toggle('active', formHidden[field]);
+  btn.textContent = formHidden[field] ? '🔒 Caché' : '▬ Visible';
+}
+window.toggleHideField = toggleHideField;
+
+function toggleDraftMode(btn) {
+  formIsDraft = !formIsDraft;
+  btn.classList.toggle('active', formIsDraft);
+  btn.textContent = formIsDraft ? 'OUI' : 'NON';
+}
+window.toggleDraftMode = toggleDraftMode;
+
+function resetHideButtons() {
+  HIDE_FIELDS.forEach(f => {
+    formHidden[f] = false;
+    const btn = document.getElementById('h_' + f);
+    if (btn) { btn.classList.remove('active'); btn.textContent = '▬ Visible'; }
+  });
+  formIsDraft = false;
+  const dBtn = document.getElementById('draftToggleBtn');
+  if (dBtn) { dBtn.classList.remove('active'); dBtn.textContent = 'NON'; }
+}
+
+function loadHideButtons(b) {
+  HIDE_FIELDS.forEach(f => {
+    formHidden[f] = !!(b.hidden && b.hidden[f]);
+    const btn = document.getElementById('h_' + f);
+    if (btn) {
+      btn.classList.toggle('active', formHidden[f]);
+      btn.textContent = formHidden[f] ? '🔒 Caché' : '▬ Visible';
+    }
+  });
+  formIsDraft = !!b.draft;
+  const dBtn = document.getElementById('draftToggleBtn');
+  if (dBtn) { dBtn.classList.toggle('active', formIsDraft); dBtn.textContent = formIsDraft ? 'OUI' : 'NON'; }
 }
 
 // ── FORM ──────────────────────────────────────────────────────
-function openAddModal(){
-  ['fName','fTag','fCrimes','fNotes','fBounty'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('fStatus').value='active';
-  document.getElementById('fPhoto').value='';
-  document.getElementById('photoPreview').style.display='none';
-  document.getElementById('fEditId').value='';
-  photoB64=null;selectedRank='S';
-  document.querySelectorAll('.rp').forEach(r=>r.classList.toggle('on',r.dataset.r==='S'));
-  document.getElementById('formTitle').textContent='📋 Nouvelle Fiche Criminelle';
+function openAddModal() {
+  ['fName','fTag','fCrimes','fNotes','fBounty'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fStatus').value = 'active';
+  document.getElementById('fPhoto').value = '';
+  document.getElementById('photoPreview').style.display = 'none';
+  document.getElementById('fEditId').value = '';
+  photoB64 = null; selectedRank = 'S';
+  document.querySelectorAll('.rp').forEach(r => r.classList.toggle('on', r.dataset.r === 'S'));
+  document.getElementById('formTitle').textContent = '📋 Nouvelle Fiche Criminelle';
+  resetHideButtons();
   document.getElementById('formOverlay').classList.add('open');
 }
-function openEditModal(id){
-  const b=(window.bandits||[]).find(x=>x.id===id);if(!b)return;
-  document.getElementById('fEditId').value=id;
-  document.getElementById('fName').value=b.name;
-  document.getElementById('fTag').value=b.tag||'';
-  document.getElementById('fCrimes').value=b.crimes||'';
-  document.getElementById('fNotes').value=b.notes||'';
-  document.getElementById('fBounty').value=b.bounty||'';
-  document.getElementById('fStatus').value=b.status||'active';
-  document.getElementById('fPhoto').value='';
-  const pv=document.getElementById('photoPreview');
-  if(b.photo){pv.src=b.photo;pv.style.display='block';}else{pv.style.display='none';}
-  photoB64=b.photo||null;selectedRank=b.rank||'S';
-  document.querySelectorAll('.rp').forEach(r=>r.classList.toggle('on',r.dataset.r===b.rank));
-  document.getElementById('formTitle').textContent='✏ Modifier la Fiche';
+function openEditModal(id) {
+  const b = (window.bandits || []).find(x => x.id === id); if (!b) return;
+  document.getElementById('fEditId').value = id;
+  document.getElementById('fName').value = b.name;
+  document.getElementById('fTag').value = b.tag || '';
+  document.getElementById('fCrimes').value = b.crimes || '';
+  document.getElementById('fNotes').value = b.notes || '';
+  document.getElementById('fBounty').value = b.bounty || '';
+  document.getElementById('fStatus').value = b.status || 'active';
+  document.getElementById('fPhoto').value = '';
+  const pv = document.getElementById('photoPreview');
+  if (b.photo) { pv.src = b.photo; pv.style.display = 'block'; } else { pv.style.display = 'none'; }
+  photoB64 = b.photo || null; selectedRank = b.rank || 'S';
+  document.querySelectorAll('.rp').forEach(r => r.classList.toggle('on', r.dataset.r === b.rank));
+  document.getElementById('formTitle').textContent = '✏ Modifier la Fiche';
+  loadHideButtons(b);
   document.getElementById('formOverlay').classList.add('open');
 }
-function closeForm(){document.getElementById('formOverlay').classList.remove('open')}
-function pickRank(el){selectedRank=el.dataset.r;document.querySelectorAll('.rp').forEach(r=>r.classList.toggle('on',r.dataset.r===selectedRank))}
-function previewPhoto(input){
-  const f=input.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=e=>{
-    const img=new Image();
-    img.onload=()=>{
-      const MAX=400;
-      let w=img.width,h=img.height;
-      if(w>h){if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}}
-      else{if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}}
-      const canvas=document.createElement('canvas');
-      canvas.width=w;canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      photoB64=canvas.toDataURL('image/jpeg',0.65);
-      const p=document.getElementById('photoPreview');
-      p.src=photoB64;p.style.display='block';
+function closeForm() { document.getElementById('formOverlay').classList.remove('open') }
+function pickRank(el) { selectedRank = el.dataset.r; document.querySelectorAll('.rp').forEach(r => r.classList.toggle('on', r.dataset.r === selectedRank)) }
+function previewPhoto(input) {
+  const f = input.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 250;
+      let w = img.width, h = img.height;
+      if (w > h) { if (w > MAX) { h = Math.round(h*MAX/w); w = MAX; } }
+      else { if (h > MAX) { w = Math.round(w*MAX/h); h = MAX; } }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      photoB64 = canvas.toDataURL('image/jpeg', 0.5);
+      const p = document.getElementById('photoPreview');
+      p.src = photoB64; p.style.display = 'block';
     };
-    img.src=e.target.result;
+    img.src = e.target.result;
   };
   r.readAsDataURL(f);
 }
-function saveBandit(){
-  if(!window.fbSave){showNotif('⚠ Firebase pas encore prêt');return;}
-  const name=document.getElementById('fName').value.trim();
-  if(!name){showNotif('⚠ Pseudo requis !');return;}
-  const editId=document.getElementById('fEditId').value;
-  const existing=(window.bandits||[]).find(x=>x.id===editId);
-  const obj={
-    id:editId||Date.now().toString(),name,
-    tag:document.getElementById('fTag').value.trim(),
-    crimes:document.getElementById('fCrimes').value.trim(),
-    notes:document.getElementById('fNotes').value.trim(),
-    bounty:document.getElementById('fBounty').value.trim(),
-    status:document.getElementById('fStatus').value,
-    rank:selectedRank,photo:photoB64||null,
-    date:existing?existing.date:new Date().toLocaleDateString('fr-BE'),
+function saveBandit() {
+  if (!window.fbSave) { showNotif('⚠ Firebase pas encore prêt'); return; }
+  const name = document.getElementById('fName').value.trim();
+  if (!name) { showNotif('⚠ Pseudo requis !'); return; }
+  const editId = document.getElementById('fEditId').value;
+  const existing = (window.bandits || []).find(x => x.id === editId);
+  const obj = {
+    id: editId || Date.now().toString(), name,
+    tag: document.getElementById('fTag').value.trim(),
+    crimes: document.getElementById('fCrimes').value.trim(),
+    notes: document.getElementById('fNotes').value.trim(),
+    bounty: document.getElementById('fBounty').value.trim(),
+    status: document.getElementById('fStatus').value,
+    rank: selectedRank, photo: photoB64 || null,
+    date: existing ? existing.date : new Date().toLocaleDateString('fr-BE'),
+    hidden: { ...formHidden },
+    draft: formIsDraft,
   };
   window.fbSave(obj)
-    .then(()=>{showNotif(editId?'✔ Fiche mise à jour':'✔ Bandit ajouté !');closeForm();})
-    .catch(()=>showNotif('⚠ Erreur Firebase — vérifie les règles Firestore'));
+    .then(() => { showNotif(editId ? '✔ Fiche mise à jour' : (formIsDraft ? '📝 Brouillon sauvegardé' : '✔ Bandit ajouté !')); closeForm(); })
+    .catch(err => showNotif('⚠ Erreur: ' + (err.code || err.message)));
 }
-function deleteBandit(id){
-  if(!confirm('Supprimer ce bandit ?'))return;
-  window.fbDelete(id).then(()=>showNotif('Fiche supprimée')).catch(()=>showNotif('⚠ Erreur Firebase'));
+function deleteBandit(id) {
+  if (!confirm('Supprimer ce bandit ?')) return;
+  window.fbDelete(id).then(() => showNotif('Fiche supprimée')).catch(() => showNotif('⚠ Erreur Firebase'));
 }
-function clearAll(){
-  if(!(window.bandits||[]).length)return;
-  if(!confirm('Vider TOUT le Bingo Book ?'))return;
-  window.fbClear().then(()=>showNotif('Bingo Book vidé')).catch(()=>showNotif('⚠ Erreur Firebase'));
+function publishBandit(id) {
+  const b = (window.bandits || []).find(x => x.id === id);
+  if (!b || !window.fbSave) return;
+  b.draft = false;
+  window.fbSave(b).then(() => showNotif('✔ Fiche publiée !')).catch(() => showNotif('⚠ Erreur Firebase'));
 }
-function showNotif(msg){
-  const n=document.getElementById('notif');n.textContent=msg;n.classList.add('show');
-  clearTimeout(n._t);n._t=setTimeout(()=>n.classList.remove('show'),3500);
+function clearAll() {
+  if (!(window.bandits || []).length) return;
+  if (!confirm('Vider TOUT le Bingo Book ?')) return;
+  window.fbClear().then(() => showNotif('Bingo Book vidé')).catch(() => showNotif('⚠ Erreur Firebase'));
+}
+function showNotif(msg) {
+  const n = document.getElementById('notif'); n.textContent = msg; n.classList.add('show');
+  clearTimeout(n._t); n._t = setTimeout(() => n.classList.remove('show'), 3500);
 }
 
-// ── GLOBAL EXPOSURE ───────────────────────────────────────────
-window.toggleFilter=toggleFilter;
-window.applyFilters=applyFilters;
-window.navigate=navigate;
-window.renderStats=renderStats;
-window.setAdmin=setAdmin;
-window.openLoginModal=openLoginModal;
-window.closePw=closePw;
-window.checkPw=checkPw;
-window.logout=logout;
-window.openAddModal=openAddModal;
-window.openEditModal=openEditModal;
-window.closeForm=closeForm;
-window.pickRank=pickRank;
-window.previewPhoto=previewPhoto;
-window.saveBandit=saveBandit;
-window.deleteBandit=deleteBandit;
-window.clearAll=clearAll;
+// Global exposure
+window.toggleFilter=toggleFilter;window.applyFilters=applyFilters;window.navigate=navigate;
+window.renderStats=renderStats;window.setAdmin=setAdmin;window.openLoginModal=openLoginModal;
+window.closePw=closePw;window.checkPw=checkPw;window.logout=logout;
+window.openAddModal=openAddModal;window.openEditModal=openEditModal;window.closeForm=closeForm;
+window.pickRank=pickRank;window.previewPhoto=previewPhoto;window.saveBandit=saveBandit;
+window.deleteBandit=deleteBandit;window.publishBandit=publishBandit;window.clearAll=clearAll;
 window.toggleRedact=toggleRedact;
 
 document.getElementById('formOverlay').addEventListener('click',function(e){if(e.target===this)closeForm()});
@@ -864,9 +975,7 @@ document.getElementById('codeOverlay').addEventListener('click',function(e){if(e
 document.addEventListener('keydown',e=>{
   if(document.getElementById('formOverlay').classList.contains('open'))return;
   if(document.getElementById('pwOverlay').classList.contains('open'))return;
-  if(document.getElementById('codeOverlay').classList.contains('open')){
-    if(e.key==='Escape')closeCodeModal();return;
-  }
+  if(document.getElementById('codeOverlay').classList.contains('open')){if(e.key==='Escape')closeCodeModal();return;}
   if(e.key==='ArrowRight')navigate(1);if(e.key==='ArrowLeft')navigate(-1);
 });
 </script>
