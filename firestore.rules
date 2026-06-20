@@ -1,0 +1,15 @@
+rules_version = '2';
+
+// À coller dans : Firebase Console -> Firestore Database -> Rules -> Publish.
+// Remplace REMPLACE_PAR_TON_UID par ton UID admin réel
+// (Firebase Console -> Authentication -> Users -> colonne "User UID").
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{collection}/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.auth.uid == "REMPLACE_PAR_TON_UID"
+                   && collection.matches('bandits_.*');
+    }
+  }
+}

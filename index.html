@@ -478,14 +478,15 @@ body.hidden-header header{display:none!important}
 
 <div class="notif" id="notif"></div>
 
-<!-- PASSWORD -->
+<!-- LOGIN -->
 <div class="pw-overlay" id="pwOverlay">
   <div class="pw-box">
     <h3>Accès Hokage</h3>
-    <p>Entrez le mot de passe administrateur</p>
-    <input type="password" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPw()"/>
+    <p>Connectez-vous avec votre compte administrateur</p>
+    <input type="email" id="loginEmail" placeholder="email@exemple.com" autocomplete="username" onkeydown="if(event.key==='Enter')checkLogin()"/>
+    <input type="password" id="pwInput" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')checkLogin()"/>
     <div class="pw-err" id="pwErr"></div>
-    <button class="btn" style="width:100%;clip-path:none" onclick="checkPw()">Confirmer</button>
+    <button class="btn" style="width:100%;clip-path:none" onclick="checkLogin()">Confirmer</button>
     <button class="btn red" style="width:100%;clip-path:none;margin-top:.4rem" onclick="closePw()">Annuler</button>
   </div>
 </div>
@@ -555,12 +556,14 @@ body.hidden-header header{display:none!important}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, doc, onSnapshot, setDoc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 const firebaseConfig = {
-  apiKey:"AIzaSyA3uzwoW09DCM4A45vxTAUDeVKWS_Vxsek",authDomain:"bingo-97d41.firebaseapp.com",
-  projectId:"bingo-97d41",storageBucket:"bingo-97d41.firebasestorage.app",
-  messagingSenderId:"943407990336",appId:"1:943407990336:web:225ddb37b7b20568aa41a5"
+  apiKey:"__FIREBASE_API_KEY__",authDomain:"__FIREBASE_AUTH_DOMAIN__",
+  projectId:"__FIREBASE_PROJECT_ID__",storageBucket:"__FIREBASE_STORAGE_BUCKET__",
+  messagingSenderId:"__FIREBASE_MESSAGING_SENDER_ID__",appId:"__FIREBASE_APP_ID__"
 };
-const app=initializeApp(firebaseConfig);const db=getFirestore(app);let _unsub=null;
+const ADMIN_UID="__ADMIN_UID__";
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);const auth=getAuth(app);let _unsub=null;
 window.initFirebase=function(colName){
   if(_unsub){_unsub();_unsub=null;}
   window.bandits=[];window._fbReady=false;
@@ -575,11 +578,18 @@ window.initFirebase=function(colName){
   window.fbClear=async()=>{const s=await getDocs(col);await Promise.all(s.docs.map(d=>deleteDoc(d.ref)));};
 };
 if(window._pendingColName){window.initFirebase(window._pendingColName);window._pendingColName=null;}
+
+// ── AUTH (remplace l'ancien mot de passe en dur) ──
+window.fbLogin=(email,pw)=>signInWithEmailAndPassword(auth,email,pw);
+window.fbLogout=()=>signOut(auth);
+onAuthStateChanged(auth,(user)=>{
+  const isAdminUser=!!user&&user.uid===ADMIN_UID;
+  if(window.onAdminAuthChange)window.onAdminAuthChange(isAdminUser);
+});
 </script>
 
 <script>
 const SERVERS={skyfall:{name:'Skyfall',code:'BADJI',col:'bandits_skyfall',kanji:'天落'},shinjuku:{name:'Shinjuku',code:'SHINJUKU',col:'bandits_shinjuku',kanji:'新宿'}};
-const ADMIN_PW='K4Q)^]hnt[sM*337RXq3';
 const THEMES={
   classique:{gold:'#c8960c',gold2:'#f0c040',red:'#c0392b',dred:'#7b1e1e',bg:'#0d0000'},
   akatsuki: {gold:'#cc0000',gold2:'#ff5555',red:'#880000',dred:'#4a0000',bg:'#040004'},
@@ -720,8 +730,7 @@ function checkCode(){
   const serverKey=_pendingCodeServer;
   const entered=document.getElementById('codeInput').value.trim().toUpperCase();
   const srv=SERVERS[serverKey];
-  if(entered===srv.code||entered===ADMIN_PW){
-    if(entered===ADMIN_PW)sessionStorage.setItem('bb_admin','1');
+  if(entered===srv.code){
     closeCodeModal();activateServer(serverKey);
   }else{document.getElementById('codeErr').textContent='Code d\'accès incorrect.';document.getElementById('codeInput').value='';document.getElementById('codeInput').focus();}
 }
@@ -737,10 +746,10 @@ function activateServer(serverKey){
   document.getElementById('statsBar').style.display='';document.querySelector('.book-wrap').style.display='';
   document.getElementById('visitorBanner').style.display=isAdmin?'none':'flex';
   if(window.initFirebase)window.initFirebase(srv.col);else window._pendingColName=srv.col;
-  if(sessionStorage.getItem('bb_admin')==='1'){sessionStorage.removeItem('bb_admin');setTimeout(()=>setAdmin(true),600);}
+  setAdmin(isAdmin);
 }
 function goBackToServers(){
-  sessionStorage.removeItem('bb_server');isAdmin=false;window.bandits=[];filtered=[];
+  sessionStorage.removeItem('bb_server');window.bandits=[];filtered=[];
   document.body.classList.remove('is-admin');document.getElementById('adminBar').classList.remove('visible');
   document.getElementById('designPanel').classList.remove('open');
   document.querySelector('header').style.display='none';document.querySelector('.toolbar').style.display='none';
@@ -779,11 +788,25 @@ function toggleRedact(bid,field){
 }
 
 // ── ADMIN ─────────────────────────────────────────────────────
-function setAdmin(val){isAdmin=val;document.body.classList.toggle('is-admin',val);document.getElementById('adminBar').classList.toggle('visible',val);document.getElementById('visitorBanner').style.display=val?'none':'flex';if(!val)document.getElementById('designPanel').classList.remove('open');render();}
-function openLoginModal(){document.getElementById('pwOverlay').classList.add('open');document.getElementById('pwInput').value='';document.getElementById('pwErr').textContent='';setTimeout(()=>document.getElementById('pwInput').focus(),80);}
+function setAdmin(val){isAdmin=val;document.body.classList.toggle('is-admin',val);document.getElementById('adminBar').classList.toggle('visible',val);document.getElementById('visitorBanner').style.display=val?'none':'flex';if(!val)document.getElementById('designPanel').classList.remove('open');applyFilters();}
+window.onAdminAuthChange=setAdmin;
+function openLoginModal(){document.getElementById('pwOverlay').classList.add('open');document.getElementById('loginEmail').value='';document.getElementById('pwInput').value='';document.getElementById('pwErr').textContent='';setTimeout(()=>document.getElementById('loginEmail').focus(),80);}
 function closePw(){document.getElementById('pwOverlay').classList.remove('open')}
-function checkPw(){if(document.getElementById('pwInput').value===ADMIN_PW){document.getElementById('pwOverlay').classList.remove('open');setAdmin(true);showNotif('✔ Mode Hokage activé');}else{document.getElementById('pwErr').textContent='Mot de passe incorrect.';document.getElementById('pwInput').value='';}}
-function logout(){setAdmin(false);showNotif('Déconnecté')}
+function checkLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pw=document.getElementById('pwInput').value;
+  if(!email||!pw){document.getElementById('pwErr').textContent='Email et mot de passe requis.';return;}
+  if(!window.fbLogin){document.getElementById('pwErr').textContent='Connexion indisponible, réessayez.';return;}
+  document.getElementById('pwErr').textContent='Connexion...';
+  window.fbLogin(email,pw).then(()=>{
+    document.getElementById('pwOverlay').classList.remove('open');
+    showNotif('✔ Mode Hokage activé');
+  }).catch(()=>{
+    document.getElementById('pwErr').textContent='Email ou mot de passe incorrect.';
+    document.getElementById('pwInput').value='';
+  });
+}
+function logout(){if(window.fbLogout)window.fbLogout();showNotif('Déconnecté')}
 
 // ── FILTERS ───────────────────────────────────────────────────
 function toggleFilter(r,el){
@@ -801,6 +824,7 @@ function applyFilters(){
   currentIdx=0;render();renderStats();
 }
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function isSafeImg(s){return typeof s==='string'&&/^data:image\/(png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(s);}
 
 // ── RENDER ────────────────────────────────────────────────────
 function render(){
@@ -810,11 +834,11 @@ function render(){
     nav.style.display='none';return;
   }
   nav.style.display='flex';
-  const b=filtered[currentIdx];const ri=RI[b.rank];const si=SI[b.status||'active']||SI.active;
+  const b=filtered[currentIdx];const ri=RI[b.rank]||RI.D;const si=SI[b.status||'active']||SI.active;
   document.getElementById('pageCtr').textContent=`${currentIdx+1} / ${filtered.length}`;
   document.getElementById('prevBtn').disabled=currentIdx===0;
   document.getElementById('nextBtn').disabled=currentIdx===filtered.length-1;
-  const photoHTML=b.photo?`<img src="${b.photo}" alt="${esc(b.name)}" style="width:100%;height:100%;object-fit:cover;border:3px solid var(--dred)">`:`<div class="no-photo">💀</div>`;
+  const photoHTML=isSafeImg(b.photo)?`<img src="${b.photo}" alt="${esc(b.name)}" style="width:100%;height:100%;object-fit:cover;border:3px solid var(--dred)">`:`<div class="no-photo">💀</div>`;
   const draftBadge=b.draft?`<div class="draft-label">⬡ BROUILLON — Non publié</div>`:'';
   const draftPageStamp=b.draft?`<div class="draft-stamp">BROUILLON</div>`:'';
   const adminBtns=isAdmin?`<div class="divider"></div><div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.2rem"><button class="btn" style="clip-path:none;font-size:.58rem;padding:.28rem .65rem" onclick="openEditModal('${b.id}')">✏ Modifier</button>${b.draft?`<button class="btn" style="clip-path:none;font-size:.58rem;padding:.28rem .65rem;border-color:#44ff44;color:#44ff44" onclick="publishBandit('${b.id}')">✔ Publier</button>`:''}<button class="btn red" style="clip-path:none;font-size:.58rem;padding:.28rem .65rem" onclick="deleteBandit('${b.id}')">✕ Supprimer</button></div>`:'';
@@ -844,7 +868,7 @@ function render(){
       <div style="display:grid;grid-template-columns:auto 1fr;gap:.15rem .5rem;margin-bottom:.3rem">
         <span class="fl">Statut</span><span class="fv">${RW(b,'status',`<span class="status-badge ${si.cls}">${si.txt}</span>`)}</span>
         <span class="fl">Prime</span><span class="fv">${RW(b,'bounty',esc(b.bounty||'???')+' ryō')}</span>
-        <span class="fl">Date</span><span class="fv">${b.date||'—'}</span>
+        <span class="fl">Date</span><span class="fv">${esc(b.date||'—')}</span>
       </div>
       <div class="divider"></div>
       <div class="fl">Crimes &amp; Méfaits</div>
@@ -887,7 +911,7 @@ function showNotif(msg){const n=document.getElementById('notif');n.textContent=m
 // Globals
 window.toggleFilter=toggleFilter;window.applyFilters=applyFilters;window.navigate=navigate;
 window.renderStats=renderStats;window.setAdmin=setAdmin;window.openLoginModal=openLoginModal;
-window.closePw=closePw;window.checkPw=checkPw;window.logout=logout;
+window.closePw=closePw;window.checkLogin=checkLogin;window.logout=logout;
 window.openAddModal=openAddModal;window.openEditModal=openEditModal;window.closeForm=closeForm;
 window.pickRank=pickRank;window.previewPhoto=previewPhoto;window.saveBandit=saveBandit;
 window.deleteBandit=deleteBandit;window.publishBandit=publishBandit;window.clearAll=clearAll;
